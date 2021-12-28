@@ -35,19 +35,25 @@ jobs:
       url: https://zhastephencom-ghp.github.io/${{ env.DEPLOY_REPO_NAME }}/
       
     steps:
+      # https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
+      - name: Set GitHub Actions as Commit Author
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+
       - name: Checkout PR repository
         uses: actions/checkout@v2
         with:
           path: 'pr-build'
           ref: ${{ env.PR_MERGE_BRANCH }}
-          
+
       - name: Checkout deployment repository
         uses: actions/checkout@v2
         with:
           repository: zhaostephencom-ghp/${{ env.DEPLOY_REPO_NAME }}
           path: 'pr-deploy'
           token: ${{ secrets.PAT }}
-      
+
       - name: Deploy to deployment repository
         run: |
           cp -r pr-build pr-deploy
@@ -60,5 +66,5 @@ jobs:
           git push -u commit/$GITHUB_SHA
 
           # Publish to gh-pages branch
-          git branch -M gh-pages
-          git push -u origin gh-pages
+          git branch -C gh-pages
+          git push -uf origin gh-pages
