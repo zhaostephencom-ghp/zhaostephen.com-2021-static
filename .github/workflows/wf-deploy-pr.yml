@@ -64,7 +64,7 @@ jobs:
 
           # Archive to commit-specific branch
           git checkout -b commit/$GITHUB_SHA
-          git push -u commit/$GITHUB_SHA
+          git push -u origin commit/$GITHUB_SHA
 
           # Publish to gh-pages branch
           git checkout -b gh-pages
