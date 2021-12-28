@@ -3,7 +3,9 @@ on:
   workflow_dispatch:
 
 env:
-  PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
+  PUBLIC_URL: www.zhaostephen.com
+  DEPLOY_ORG_NAME: zhaostephencom-ghp
+  DEPLOY_REPO_NAME: zhaostephen.com-prod
 
 jobs:
   build:
@@ -32,7 +34,7 @@ jobs:
       - name: Checkout Prod Target
         uses: actions/checkout@v2
         with:
-          repository: zhaostephencom-ghp/zhaostephen.com-prod
+          repository: ${{ env.DEPLOY_ORG_NAME }}/${{ env.DEPLOY_REPO_NAME }}
           path: 'deploy'
           token: ${{ secrets.PAT }}
       

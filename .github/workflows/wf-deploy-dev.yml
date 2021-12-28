@@ -3,13 +3,11 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-    inputs:
-      PUBLIC_URL__override:
-        description: Override for env var PUBLIC_URL 
-        required: false
 
 env:
-  PUBLIC_URL: ${{ github.event.inputs.PUBLIC_URL__override || secrets.PUBLIC_URL }}
+  PUBLIC_URL: zhaostephencom-ghp.github.io/zhaostephen.com-dev
+  DEPLOY_ORG_NAME: zhaostephencom-ghp
+  DEPLOY_REPO_NAME: zhaostephen.com-dev
 
 jobs:
   build:
@@ -38,7 +36,7 @@ jobs:
       - name: Checkout Dev Target
         uses: actions/checkout@v2
         with:
-          repository: zhaostephencom-ghp/zhaostephen.com-dev
+          repository: ${{ env.DEPLOY_ORG_NAME }}/${{ env.DEPLOY_REPO_NAME }}
           path: 'deploy'
           token: ${{ secrets.PAT }}
       
