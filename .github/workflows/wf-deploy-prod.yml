@@ -1,0 +1,44 @@
+name: Build and Deploy to Prod
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://${{ env.PUBLIC_URL }}
+    steps:
+      # https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
+      - name: Set GitHub Actions as Commit Author
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+          
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          path: 'build'
+      
+      - name: Build
+        run: |
+          cd build
+          # Do build stuff here
+          cd ..
+      
+      - name: Checkout Prod Target
+        uses: actions/checkout@v2
+        with:
+          repository: zhaostephencom-ghp/zhaostephen.com-prod
+          path: 'deploy'
+          token: ${{ secrets.PAT }}
+      
+      - name: Push files to target
+        run: |
+          cp -r build/* deploy
+          cd deploy
+          touch .nojekyll
+          echo ${{ env.PUBLIC_URL }} > CNAME
+          git add .
+          git commit -m $GITHUB_SHA
+          git push
