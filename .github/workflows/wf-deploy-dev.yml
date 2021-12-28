@@ -3,6 +3,13 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      PUBLIC_URL__override:
+        description: Override for env var PUBLIC_URL 
+        required: false
+
+env:
+  PUBLIC_URL: ${{ github.event.inputs.PUBLIC_URL__override || secrets.PUBLIC_URL }}
 
 jobs:
   build:

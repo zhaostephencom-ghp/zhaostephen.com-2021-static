@@ -2,6 +2,9 @@ name: Build and Deploy to Prod
 on:
   workflow_dispatch:
 
+env:
+  PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
