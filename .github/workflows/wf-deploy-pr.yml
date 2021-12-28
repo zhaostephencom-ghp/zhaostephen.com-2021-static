@@ -56,8 +56,9 @@ jobs:
 
       - name: Deploy to deployment repository
         run: |
-          cp -r pr-build pr-deploy
+          cp -r pr-build/* pr-deploy/
           cd pr-deploy
+          touch .nojekyll
           git add .
           git commit -m $GITHUB_SHA
 
@@ -66,5 +67,5 @@ jobs:
           git push -u commit/$GITHUB_SHA
 
           # Publish to gh-pages branch
-          git branch -C gh-pages
+          git checkout -b gh-pages
           git push -uf origin gh-pages
