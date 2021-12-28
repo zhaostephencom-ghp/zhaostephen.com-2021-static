@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pr-staging
-      url: https://zhastephencom-ghp.github.io/${{ env.DEPLOY_REPO_NAME }}/
+      url: https://zhaostephencom-ghp.github.io/${{ env.DEPLOY_REPO_NAME }}/
       
     steps:
       # https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
