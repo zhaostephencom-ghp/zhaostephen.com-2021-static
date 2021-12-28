@@ -1,29 +1,29 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Pull Request Build and Deploy
 
-# Controls when the workflow will run
 on:
   pull_request:
     branches: [ main, integration ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Number of the Pull Request
+        required: true
   
 # Environment variables
 env:
-  PR_REPO_NAME: zhaostephen.com-2021-static-${{ github.event.pull_request.node_id }}
+  DEPLOY_REPO_NAME: zhaostephen.com-2021-static-pr${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+  PR_MERGE_BRANCH: refs/pull/${{ github.event.pull_request.number || github.event.inputs.pr_number }}/merge
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   create-page-host:
     runs-on: ubuntu-latest
     steps:
       - name: Create new repository for temporary deployment
         uses: octobay/create-repository-action@v1
         with:
-          name: ${{ env.PR_REPO_NAME }}
+          name: ${{ env.DEPLOY_REPO_NAME }}
           org: zhaostephencom-ghp
           access-token: ${{ secrets.PAT }}
 
@@ -32,18 +32,19 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pr-staging
-      url: https://zhastephencom-ghp.github.io/${{ env.PR_REPO_NAME }}/
+      url: https://zhastephencom-ghp.github.io/${{ env.DEPLOY_REPO_NAME }}/
       
     steps:
       - name: Checkout PR repository
         uses: actions/checkout@v2
         with:
           path: 'pr-build'
+          ref: ${{ env.PR_MERGE_BRANCH }}
           
       - name: Checkout deployment repository
         uses: actions/checkout@v2
         with:
-          repository: zhaostephencom-ghp/${{ env.PR_REPO_NAME }}
+          repository: zhaostephencom-ghp/${{ env.DEPLOY_REPO_NAME }}
           path: 'pr-deploy'
           token: ${{ secrets.PAT }}
       
@@ -53,5 +54,11 @@ jobs:
           cd pr-deploy
           git add .
           git commit -m $GITHUB_SHA
+
+          # Archive to commit-specific branch
+          git checkout -b commit/$GITHUB_SHA
+          git push -u commit/$GITHUB_SHA
+
+          # Publish to gh-pages branch
           git branch -M gh-pages
           git push -u origin gh-pages
