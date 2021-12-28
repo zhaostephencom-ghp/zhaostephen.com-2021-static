@@ -1,0 +1,28 @@
+name: Close Pull Request Delete Deployment
+
+on:
+  pull_request:
+    branches: [ main, integration ]
+    types: [ closed ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Number of the Pull Request
+        required: true
+
+# Environment variables
+env:
+  DEPLOY_REPO_NAME: zhaostephen.com-2021-static-pr${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+  PR_MERGE_BRANCH: refs/pull/${{ github.event.pull_request.number || github.event.inputs.pr_number }}/merge
+
+jobs:
+  delete-page-host:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete repository for temporary deployment
+        uses: octobay/delete-repository-action@v1
+        with:
+          name: zhaostephencom-ghp/${{ env.DEPLOY_REPO_NAME }}
+          access-token: ${{ secrets.PAT }}
