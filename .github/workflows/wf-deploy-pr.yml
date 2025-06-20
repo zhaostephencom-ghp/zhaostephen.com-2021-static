@@ -21,10 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create new repository for temporary deployment
-        uses: octobay/create-repository-action@v1
+        uses: repo-ctrl/create-repo-action@main
         with:
-          name: ${{ env.DEPLOY_REPO_NAME }}
-          org: zhaostephencom-ghp
+          repo-name: ${{ env.DEPLOY_REPO_NAME }}
           access-token: ${{ secrets.PAT }}
 
   pr-build-deploy:
