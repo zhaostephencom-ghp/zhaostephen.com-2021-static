@@ -21,10 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create new repository for temporary deployment
-        uses: repo-ctrl/create-repo-action@main
+        uses: f1lander/create-repository-action@v1.0.2
         with:
-          repo-name: ${{ env.DEPLOY_REPO_NAME }}
-          org-admin-token: ${{ secrets.PAT }}
+          name: ${{ env.DEPLOY_REPO_NAME }}
+          org: zhaostephencom-ghp
+          private: false
+          access-token: ${{ secrets.PAT }}
 
   pr-build-deploy:
     needs: create-page-host
