@@ -24,7 +24,7 @@ jobs:
         uses: repo-ctrl/create-repo-action@main
         with:
           repo-name: ${{ env.DEPLOY_REPO_NAME }}
-          access-token: ${{ secrets.PAT }}
+          org-admin-token: ${{ secrets.PAT }}
 
   pr-build-deploy:
     needs: create-page-host
