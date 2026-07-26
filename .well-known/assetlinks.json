@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.zhaostephen.szmde",
+      "sha256_cert_fingerprints": ["7F:EC:74:94:03:C8:D8:88:5B:6A:CD:07:77:4D:C2:45:89:31:32:7D:B8:8C:6B:07:54:4E:69:03:19:F9:63:48"]
+   }
+  }
+]
