@@ -41,7 +41,7 @@ jobs:
       - name: Push files to target
         run: |
           shopt -s dotglob
-          cp -r build/* deploy
+          rsync -a --exclude='.git' --exclude='.github' build/ deploy/
           cd deploy
           echo ${{ env.PUBLIC_URL }} > CNAME
           git add .
