@@ -57,11 +57,14 @@ jobs:
 
       - name: Deploy to deployment repository
         run: |
-          shopt -s dotglob
-          rsync -a --exclude='.git' --exclude='.github' pr-build/ pr-deploy/
+          # Always exclude .git so we never clobber the deploy repo's git dir.
+          # Everything else comes from the repo's .buildignore.
+          EXCLUDES=(--exclude='.git')
+          [ -f pr-build/.buildignore ] && EXCLUDES+=(--exclude-from=pr-build/.buildignore)
+          rsync -a "${EXCLUDES[@]}" pr-build/ pr-deploy/
           cd pr-deploy
           git add .
-          git commit -m $GITHUB_SHA
+          git commit -m "$GITHUB_SHA"
 
           # Archive to commit-specific branch
           git checkout -b commit/$GITHUB_SHA

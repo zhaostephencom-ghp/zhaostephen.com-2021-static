@@ -1,0 +1,8 @@
+# Files/folders excluded when copying the build into a deploy repo.
+# Consumed by the wf-deploy-*.yml workflows via `rsync --exclude-from`.
+# One pattern per line; blank lines and #/; comment lines are ignored.
+# Patterns without a leading slash match at any depth (rsync semantics).
+
+.git
+.github
+.buildignore
