@@ -58,7 +58,7 @@ jobs:
       - name: Deploy to deployment repository
         run: |
           shopt -s dotglob
-          cp -r pr-build/* pr-deploy/
+          rsync -a --exclude='.git' --exclude='.github' pr-build/ pr-deploy/
           cd pr-deploy
           git add .
           git commit -m $GITHUB_SHA
