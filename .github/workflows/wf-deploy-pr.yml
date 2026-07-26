@@ -57,9 +57,9 @@ jobs:
 
       - name: Deploy to deployment repository
         run: |
+          shopt -s dotglob
           cp -r pr-build/* pr-deploy/
           cd pr-deploy
-          touch .nojekyll
           git add .
           git commit -m $GITHUB_SHA
 
