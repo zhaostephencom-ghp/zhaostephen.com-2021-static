@@ -40,10 +40,13 @@ jobs:
       
       - name: Push files to target
         run: |
-          cp -r build/* deploy
+          # Always exclude .git so we never clobber the deploy repo's git dir.
+          # Everything else comes from the repo's .buildignore.
+          EXCLUDES=(--exclude='.git')
+          [ -f build/.buildignore ] && EXCLUDES+=(--exclude-from=build/.buildignore)
+          rsync -a "${EXCLUDES[@]}" build/ deploy/
           cd deploy
-          touch .nojekyll
           echo ${{ env.PUBLIC_URL }} > CNAME
           git add .
-          git commit -m $GITHUB_SHA
+          git commit -m "$GITHUB_SHA"
           git push
