@@ -42,9 +42,9 @@ jobs:
       
       - name: Push files to target
         run: |
+          shopt -s dotglob
           cp -r build/* deploy
           cd deploy
-          touch .nojekyll
           # Do not do CNAME because the PUBLIC_URL here is just a github.io page
           # echo ${{ env.PUBLIC_URL }} > CNAME
           git add .
